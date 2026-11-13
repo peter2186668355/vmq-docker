@@ -1,0 +1,39 @@
+MIT License
+
+Copyright (c) 2026 im-webb
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---------------------------------------------------------------------------
+适用范围与第三方声明
+
+1. 除下列内容外，本仓库的 Worker 代码、前台站点（apps/web）、后台 SPA
+   （apps/admin）与支付页模板由本项目作者编写，以 MIT 发布。
+2. 本项目是 V免签（https://github.com/szvone/vmqphp，MIT，
+   Copyright © 2019 vone）的 TypeScript / Cloudflare Workers 重写，
+   部分业务逻辑与接口行为沿用上游，相应部分同时受上游 MIT 许可约束。
+3. 后台 SPA 的 apps/admin/src/components/ui/ 下部分组件改编自
+   shadcn/ui（https://github.com/shadcn-ui/ui，MIT，
+   Copyright © 2023 shadcn），相应部分同时受其 MIT 许可约束。
+4. 第三方 npm 依赖按各自许可证发布，不适用本文件的 MIT 条款。
+   上游与依赖的完整版权声明见 THIRD_PARTY_NOTICES.md。
+5. public/static/pay/3/img/、public/static/web/picture/ 下的微信、支付宝、
+   QQ、数字人民币标识，以及 apps/web/public/images/qqpay-icon.png，
+   仅用于标示支付方式；相关商标与图形权利归各自权利人，不适用 MIT，
+   也不表示本项目获得其授权或背书。
