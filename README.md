@@ -15,6 +15,28 @@
 
 ## Docker 自托管
 
+### 一键安装（Docker Nginx + 自动 HTTPS）
+
+在已安装 Docker Engine、Docker Compose v2.24.4 或更新版本，以及 Git、curl、OpenSSL、flock 的 Linux 服务器上执行：
+
+```bash
+git clone https://github.com/peter2186668355/vmq-docker.git && bash vmq-docker/install.sh
+```
+
+脚本只会询问支付域名，例如 `pay.example.com`。先将域名解析到服务器，确保公网可访问 TCP 80 和 443，且这两个端口可由 Nginx 容器绑定。配置了 AAAA 记录时，IPv6 也需要指向同一部署并可访问。
+
+脚本会构建并启动 V免签，由 Nginx 提供 HTTPS 反代。Certbot 通过 Let's Encrypt HTTP-01 自动申请和续期证书，无需填写邮箱。证书续期后 Nginx 会自动重新加载。HTTPS 健康检查通过后，脚本会显示管理员初始化链接。
+
+```bash
+cd vmq-docker
+bash install.sh
+docker compose -f compose.yaml -f compose.nginx.yaml logs --tail 50 certbot nginx
+```
+
+在安装目录再次运行脚本会复用域名、初始化令牌、SQLite 数据和证书。更新时在该目录先执行 `git pull --ff-only`，再运行脚本。签发失败时 Certbot 会在 20 分钟后重试。修正解析或端口后，也可用 `docker compose -f compose.yaml -f compose.nginx.yaml restart certbot` 立即重试。
+
+### 手动部署（已有反代）
+
 在 Debian 或其他已安装 Docker Engine 和 Compose v2 的 Linux 服务器上，可以用本仓库直接构建并运行。容器运行 Node.js 24，启动时自动建表，订单、配置和收款码保存在 SQLite 数据卷。
 
 在项目目录执行：

@@ -1,0 +1,44 @@
+services:
+  vmq:
+    ports: !reset []
+    environment:
+      TRUST_PROXY: "1"
+  nginx:
+    image: nginx:stable-alpine
+    init: true
+    restart: unless-stopped
+    depends_on:
+      - vmq
+    entrypoint: ["/bin/sh", "/opt/vmq/nginx/run.sh"]
+    environment:
+      VMQ_DOMAIN: ${VMQ_DOMAIN:?Run bash install.sh first}
+    ports:
+      - "80:80"
+      - "443:443"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/.well-known/acme-ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - ./docker/nginx:/opt/vmq/nginx:ro
+      - letsencrypt:/etc/letsencrypt:ro
+      - acme-webroot:/var/www/acme:ro
+  certbot:
+    image: certbot/certbot:v5.10.0
+    init: true
+    restart: unless-stopped
+    depends_on:
+      nginx:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "/opt/vmq/certbot.sh"]
+    environment:
+      VMQ_DOMAIN: ${VMQ_DOMAIN:?Run bash install.sh first}
+    volumes:
+      - ./docker/certbot.sh:/opt/vmq/certbot.sh:ro
+      - letsencrypt:/etc/letsencrypt
+      - acme-webroot:/var/www/acme
+
+volumes:
+  letsencrypt:
+  acme-webroot:

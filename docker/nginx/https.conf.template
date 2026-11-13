@@ -1,0 +1,22 @@
+server {
+    listen 443 ssl;
+    server_name ${VMQ_DOMAIN};
+
+    ssl_certificate /etc/letsencrypt/live/${VMQ_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${VMQ_DOMAIN}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    client_max_body_size 3m;
+    resolver 127.0.0.11 valid=10s ipv6=off;
+    set $vmq_backend http://vmq:8787;
+
+    location = /setup {
+        access_log off;
+        error_log /dev/null crit;
+        include /opt/vmq/nginx/proxy.conf;
+    }
+
+    location / {
+        include /opt/vmq/nginx/proxy.conf;
+    }
+}
