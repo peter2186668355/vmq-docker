@@ -39,8 +39,10 @@ export async function buildNotifyPayload(env: Env, order: OrderRow): Promise<str
     money: order.money,
     really_money: order.truemoney,
     name: order.name,
-    sitename: order.sitename,
   };
+  // Xboard/易支付商户按收到的参数验签：空 sitename 在本端签名时被过滤、对方却可能计入，
+  // 双方结果不一致会返回 422 verify error。空值干脆不发送。
+  if (order.sitename) params.sitename = order.sitename;
   const sign = epaySign(params, key);
   const qs = new URLSearchParams(params);
   qs.set('sign', sign);
@@ -116,7 +118,7 @@ export async function deliverTask(env: Env, taskId: number): Promise<boolean> {
   ).bind(ts + 60, taskId, ts, task.attempts).run();
   if (!claimed.meta.changes) return false;
 
-  const expect = await getConfig(env, 'notify_success_body', '@json:code=1');
+  const expect = await getConfig(env, 'notify_success_body', 'success');
   const url = task.url.includes('?') ? `${task.url}&${task.payload}` : `${task.url}?${task.payload}`;
 
   let ok = false;

@@ -179,7 +179,7 @@ export async function handleAdminApi(req: Request, env: Env, sub: string): Promi
         heartAge: age,
         staticAssets: STATIC_ASSETS_LABEL,
         uploadLimit: `${MAX_UPLOAD_LABEL} · ${UPLOAD_MIME_LABEL}`,
-        notifyJudge: notifyJudgeLabel(cfg['notify_success_body'] ?? '@json:code=1'),
+        notifyJudge: notifyJudgeLabel(cfg['notify_success_body'] ?? 'success'),
         notifyRetry: '8 次 · 跨度约 20 小时',
         quota: docker ? '取决于宿主机及容器资源限制' : '以 Cloudflare 控制台为准',
       })
